@@ -20,5 +20,14 @@
   "bugs": {
     "url": "https://github.com/ansballard/gulp-seed/issues"
   },
-  "homepage": "https://github.com/ansballard/gulp-seed"
+  "homepage": "https://github.com/ansballard/gulp-seed",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-eslint": "^0.7.0",
+    "gulp-if": "^1.2.5",
+    "gulp-load-plugins": "^0.8.1",
+    "gulp-print": "^1.1.0",
+    "gulp-util": "^3.0.4",
+    "yargs": "^3.5.4"
+  }
 }
