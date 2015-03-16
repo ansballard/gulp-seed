@@ -19,11 +19,9 @@ var log = function(message) {
  *  TASKS
  */
 
-gulp.task("temp", function() {
+gulp.task("lint", function() {
 
 	"use strict";
-
-	log("Starting temp");
 
 	return gulp
 		.src([
