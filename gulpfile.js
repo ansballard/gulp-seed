@@ -3,13 +3,6 @@ var gulp = require("gulp");
 var $ = require("gulp-load-plugins")({lazy: true});
 var args = require("yargs").argv;
 
-/*
-var eslint = require("gulp-eslint");
-var util = require("gulp-util");
-var gprint = require("gulp-print");
-var gif = require("gulp-if");
-*/
-
 /**
  *  GLOBAL FUNCTIONS
  */
@@ -22,6 +15,10 @@ var log = function(message) {
 
 };
 
+/**
+ *  TASKS
+ */
+
 gulp.task("temp", function() {
 
 	"use strict";
@@ -30,7 +27,7 @@ gulp.task("temp", function() {
 
 	return gulp
 		.src([
-			"./src/app.js"
+			"./**/*.js"
 		])
 		.pipe($.if(args.verbose, $.print()))
         .pipe($.eslint())
