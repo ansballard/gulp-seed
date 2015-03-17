@@ -14,7 +14,15 @@ var config = require("./gulp-config")();
 
 var log = function(message, color) { "use strict";
 	color = color || "green";
-	$.util.log($.util.colors[color](message));
+	if(typeof message === "object") {
+		for(var item in message) {
+			if(message.hasOwnProperty(item)) {
+				$.util.log($.util.colors[color](message[item]));
+			}
+		}
+	} else {
+		$.util.log($.util.colors[color](message));
+	}
 };
 
 var clean = function(files, done) { "use strict";
@@ -41,24 +49,29 @@ gulp.task("lint", function() { "use strict";
 gulp.task("prefix", ["clean-styles"], function() { "use strict";
 	log("prefixing css", "yellow");
 	return gulp
-		.src(config.src.css)
+		.src(config.client.src.css)
 		.pipe($.plumber())
 		.pipe($.autoprefixer({browsers: ["last 2 version"]}))
 		.pipe(gulp.dest(config.tmp))
 	;
 });
 
-gulp.task("wiredep", function(){ "use strict";
-  return gulp
-    .src(config.index)
-    .pipe(wiredep(config.wiredepOptions))
-    .pipe($.inject(gulp.src(config.src.js)))
-    .pipe(gulp.dest(config.public))
-  ;
+gulp.task("inject", function() { "use strict";
+	return gulp
+		.src(config.index)
+		.pipe(wiredep(config.wiredepOptions))
+		.pipe($.inject(gulp.src(config.client.src.js)))
+		.pipe($.inject(gulp.src(config.tmp + "*.css")))
+		.pipe(gulp.dest(config.client.dist.html))
+	;
+});
+
+gulp.task("serve-dev", ["inject"], function() { "use strict";
+	return $.nodemon(config.nodeOptions);
 });
 
 gulp.task("css-watcher", function() { "use strict";
-	gulp.watch([config.src.css], ["prefix"]);
+	gulp.watch([config.client.src.css], ["prefix"]);
 });
 
 gulp.task("lint-watcher", function() { "use strict";

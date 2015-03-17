@@ -1,25 +1,74 @@
-/*global module*/
+/*global module require*/
 module.exports = function() {
 
 	"use strict";
 
-	var config = {
+	var dist = "./public/";
+	var src = "./src/";
+	var clientsrc = src + "client/";
+	var serversrc = src + "server/";
+	var clientdist = dist + "client/";
+	//var serverdist = dist + "server/";
+	var tmp = "./tmp/";
+	var port = 3000;
+	var url = "http://localhost";
+
+	var client = {
 		src: {
-			js: "./src/js/*.js",
-			css: "./src/css/*.css"
+			js: clientsrc + "js/*.js",
+			css: clientsrc + "css/*.css",
+			html: clientsrc + "html/"
 		},
 		dist: {
-			js: "./public/js",
-			css: "./public/css"
+			js: clientdist + "js/",
+			css: clientdist + "css/",
+			html: clientdist + "html/"
+		}
+	};
+	var server = {
+		src: {
+			js: clientsrc + "js/*.js",
+			css: clientsrc + "css/*.css",
+			html: clientsrc + "html/"
 		},
+		dist: {
+			js: clientdist + "js/",
+			css: clientdist + "css/",
+			html: clientdist + "html/"
+		}
+	};
+
+	var nodeServer = serversrc + "js/app.js";
+
+	var config = {
+		client: client,
+		server: server,
 		toLint: [
 			"./gulpfile.js",
 			"./gulp-config.js",
-			"./src/js/*.js"
+			client.src + "js/*.js"
 		],
-		index: "./index.html",
-		public: "./public/",
-		tmp: "./tmp/"
+		bower: {
+			json: require("./bower.json"),
+			directory: "./bower_components/",
+			ignorePath: "../.."
+		},
+		index: src + "html/index.html",
+		tmp: tmp,
+		nodeOptions: {
+			script: nodeServer,
+			delay: 1,
+			env: {
+				"PORT": port,
+				"URL": url
+			}
+		}
+	};
+
+	config.wiredepOptions = {
+		bowerJson: config.bower.json,
+		directory: config.bower.directory,
+		ignorePath: config.bower.ignorePath
 	};
 
 	return config;

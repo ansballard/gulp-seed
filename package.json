@@ -34,5 +34,9 @@
     "gulp-util": "^3.0.4",
     "wiredep": "^2.2.2",
     "yargs": "^3.5.4"
+  },
+  "dependencies": {
+    "gulp-nodemon": "^1.0.5",
+    "wiredep": "^2.2.2"
   }
 }
