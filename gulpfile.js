@@ -66,9 +66,36 @@ gulp.task("inject", function() { "use strict";
 	;
 });
 
-gulp.task("serve-dev", ["inject"], function() { "use strict";
-	return $.nodemon(config.nodeOptions);
+gulp.task("optimize", ["inject"], function() { "use strict";
+	var userefAssets = $.useref.assets();
+	return gulp
+		.src(config.client.dist.html)
+		.pipe($.plumber())
+		.pipe(userefAssets)
+		.pipe($.if("*.js", $.uglify()))
+		.pipe($.if("*.css", $.minifyCss()))
+		.pipe(userefAssets.restore())
+		.pipe($.useref())
+		.pipe(gulp.dest("./public/"))
+	;
 });
+
+gulp.task("serve", ["inject"], function() { "use strict";
+	return $.nodemon(config.nodeOptions)
+		.on("restart", function() {
+			//
+		})
+		.on("start", function() {
+			log("starting app at " + config.nodeOptions.script);
+		})
+		.on("crash", function() {
+			//
+		})
+	;
+});
+
+gulp.task("help", $.taskListing);
+gulp.task("default", ["help"]);
 
 gulp.task("css-watcher", function() { "use strict";
 	gulp.watch([config.client.src.css], ["prefix"]);
