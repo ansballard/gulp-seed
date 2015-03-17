@@ -1,5 +1,6 @@
 /*global require*/
 var gulp = require("gulp");
+var wiredep = require("wiredep").stream;
 var args = require("yargs").argv;
 var del = require("del");
 
@@ -11,36 +12,22 @@ var config = require("./gulp-config")();
  *  GLOBAL FUNCTIONS
  */
 
-var log = function(message, color) {
-
-	"use strict";
-
+var log = function(message, color) { "use strict";
 	color = color || "green";
-
 	$.util.log($.util.colors[color](message));
-
 };
 
-var clean = function(files, done) {
-
-	"use strict";
-
+var clean = function(files, done) { "use strict";
 	log("Cleaning: " + files, "red");
-
 	del(files, done);
-
 };
 
 /**
  *  TASKS
  */
 
-gulp.task("lint", function() {
-
-	"use strict";
-
+gulp.task("lint", function() { "use strict";
 	log("Linting: " + config.toLint, "yellow");
-
 	return gulp
 		.src(config.toLint)
 		.pipe($.if(args.verbose, $.print()))
@@ -51,12 +38,8 @@ gulp.task("lint", function() {
 
 });
 
-gulp.task("prefix", ["clean-styles"], function() {
-
-	"use strict";
-
+gulp.task("prefix", ["clean-styles"], function() { "use strict";
 	log("prefixing css", "yellow");
-
 	return gulp
 		.src(config.src.css)
 		.pipe($.plumber())
@@ -65,17 +48,24 @@ gulp.task("prefix", ["clean-styles"], function() {
 	;
 });
 
-gulp.task("css-watcher", function() {
+gulp.task("wiredep", function(){ "use strict";
+  return gulp
+    .src(config.index)
+    .pipe(wiredep(config.wiredepOptions))
+    .pipe($.inject(gulp.src(config.src.js)))
+    .pipe(gulp.dest(config.public))
+  ;
+});
 
-	"use strict";
-
+gulp.task("css-watcher", function() { "use strict";
 	gulp.watch([config.src.css], ["prefix"]);
 });
 
-gulp.task("clean-styles", function(done) {
+gulp.task("lint-watcher", function() { "use strict";
+  gulp.watch([config.toLint], ["lint"]);
+});
 
-	"use strict";
-
+gulp.task("clean-styles", function(done) { "use strict";
 	var files = config.tmp + "*.css";
 	clean(files, done);
 });

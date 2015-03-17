@@ -9,13 +9,16 @@ module.exports = function() {
 			css: "./src/css/*.css"
 		},
 		dist: {
-			js: "./dist/js",
-			css: "./dist/css"
+			js: "./public/js",
+			css: "./public/css"
 		},
 		toLint: [
 			"./gulpfile.js",
-			"gulp-config.js"
+			"./gulp-config.js",
+			"./src/js/*.js"
 		],
+		index: "./index.html",
+		public: "./public/",
 		tmp: "./tmp/"
 	};
 

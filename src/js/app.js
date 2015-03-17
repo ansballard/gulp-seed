@@ -1,9 +1,9 @@
-(function() {
+(function() { "use strict";
 	var tempfunction = function() {
 
-		"use strict";
-
-		console.log("hello world");
+		return 1 + 1;
 
 	};
+
+	tempfunction();
 }());
